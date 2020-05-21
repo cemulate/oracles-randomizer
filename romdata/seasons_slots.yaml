@@ -249,7 +249,7 @@ subrosia seaside:
   room: 0x0166
   morerooms: [0x0176, 0x0175, 0x0165]
   maptile: 0xb0
-  addr: {bank: 0x08} # addr set at EOB
+  ids: [{bank: 0x08, addr: 0x62f4}]
 subrosian wilds chest:
   treasure: blue ore
   room: 0x0141
@@ -288,8 +288,7 @@ great furnace:
   treasure: hard ore
   room: 0x038e
   maptile: 0xb9
-  ids: [{bank: 0x15}, {bank: 0x09, addr: 0x66eb}] # addr set at EOB
-  subids: [{bank: 0x15}, {bank: 0x09, addr: 0x66ea}] # addr set at EOB
+  ids: [{bank: 0x15, 0x5b84}, {bank: 0x09, addr: 0x66eb}]
 subrosian smithy:
   treasure: iron shield
   room: 0x0397

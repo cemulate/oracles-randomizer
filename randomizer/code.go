@@ -67,13 +67,16 @@ func (rom *romState) replaceRaw(addr address, label, data string) string {
 	return label
 }
 
-// returns a byte table of {id, param, mode, player} entries for randomized
-// items.
-func makeCheckIndexTable(itemSlots map[string]*itemSlot) string {
-	b := new(strings.Builder)
-	for i, key := range orderedKeys(itemSlots) {
+// writes entries to the index table which pass a filter function.
+func writeFilteredIndexTable(b *strings.Builder, itemSlots map[string]*itemSlot,
+	filter func(*itemSlot) bool) {
+	for _, key := range orderedKeys(itemSlots) {
 		slot := itemSlots[key]
-		slot.index = uint16(i)
+		if !filter(slot) {
+			continue
+		}
+
+		slot.index = uint16(b.Len() / 4)
 
 		// use no pickup animation for falling small keys
 		mode := slot.collectMode
@@ -81,10 +84,26 @@ func makeCheckIndexTable(itemSlots map[string]*itemSlot) string {
 			mode &= 0xf8
 		}
 
-		if _, err := b.Write([]byte{slot.treasure.id, slot.treasure.param, mode, slot.player}); err != nil {
+		if _, err := b.Write([]byte{slot.treasure.id, slot.treasure.param, mode,
+			slot.player}); err != nil {
 			panic(err)
 		}
 	}
+}
+
+// returns a byte table of {id, param, mode, player} entries for randomized
+// items.
+func makeCheckIndexTable(itemSlots map[string]*itemSlot) string {
+	b := new(strings.Builder)
+
+	// write items without subids addresses first, since those need to have
+	// indexes < 128.
+	writeFilteredIndexTable(b, itemSlots, func(slot *itemSlot) bool {
+		return len(slot.subidAddrs) == 0
+	})
+	writeFilteredIndexTable(b, itemSlots, func(slot *itemSlot) bool {
+		return len(slot.subidAddrs) > 0
+	})
 
 	return b.String()
 }

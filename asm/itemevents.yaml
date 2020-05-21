@@ -121,16 +121,6 @@ seasons:
   # don't refill seeds when getting the first member's shop item.
   08/4c02/: nop; nop; nop
 
-  # star ore item doesn't normally get a subid. values are replaced at
-  # randomization.
-  08/setStarOreIds: |
-      inc l
-      ld (hl),TREASURE_STAR_ORE
-      inc l
-      ld (hl),00
-      ret
-  08/62f2/: call setStarOreIds
-
   # ignore sword level for lost woods pedestal.
   08/7e62/: ld a,01
 
@@ -250,16 +240,6 @@ seasons:
   # skip shield + shield level checks for forging hard ore.
   0b/75c6/: db jumpifitemobtained,TREASURE_PUNCH
   15/62ac/: jr 05
-
-  # hard ore item doesn't normally get a subid. values are replaced at
-  # randomization.
-  15/setHardOreIds: |
-      inc l
-      ld (hl),52
-      inc l
-      ld (hl),00
-      ret
-  15/5b83/: call setHardOreIds
 
   # don't display normal fixed text for temple of seasons item.
   15/70be/: nop; nop; nop
