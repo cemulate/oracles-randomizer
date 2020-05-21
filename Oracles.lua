@@ -1,6 +1,6 @@
 local addrs = nil
 local seasons_addrs = {
-	multiPlayerNumber = 0x3f25,
+	multiPlayerNumber = 0x3f42,
 	wGameState = 0xc2ee,
 	wNetCountIn = 0xc6a1,
 	wNetTreasureIn = 0xcbfb,
@@ -10,7 +10,7 @@ local seasons_addrs = {
 	wActiveRoom = 0xcc4c,
 }
 local ages_addrs = {
-	multiPlayerNumber = 0x3f1b,
+	multiPlayerNumber = 0x3f38,
 	wGameState = 0xc2ee,
 	wNetCountIn = 0xc6a9,
 	wNetTreasureIn = 0xcbfb,

@@ -67,13 +67,13 @@ func (rom *romState) replaceRaw(addr address, label, data string) string {
 	return label
 }
 
-// returns a byte table of (group, room, collect mode, player) entries for
-// randomized items. a mode >7f means to use &7f as an index to a jump table
-// for special cases.
-func makeCollectPropertiesTable(itemSlots map[string]*itemSlot) string {
+// returns a byte table of {id, param, mode, player} entries for randomized
+// items.
+func makeCheckIndexTable(itemSlots map[string]*itemSlot) string {
 	b := new(strings.Builder)
-	for _, key := range orderedKeys(itemSlots) {
+	for i, key := range orderedKeys(itemSlots) {
 		slot := itemSlots[key]
+		slot.index = uint16(i)
 
 		// use no pickup animation for falling small keys
 		mode := slot.collectMode
@@ -81,18 +81,11 @@ func makeCollectPropertiesTable(itemSlots map[string]*itemSlot) string {
 			mode &= 0xf8
 		}
 
-		if _, err := b.Write([]byte{slot.group, slot.room, mode, slot.player}); err != nil {
+		if _, err := b.Write([]byte{slot.treasure.id, slot.treasure.param, mode, slot.player}); err != nil {
 			panic(err)
-		}
-		for _, groupRoom := range slot.moreRooms {
-			group, room := byte(groupRoom>>8), byte(groupRoom)
-			if _, err := b.Write([]byte{group, room, mode, slot.player}); err != nil {
-				panic(err)
-			}
 		}
 	}
 
-	b.Write([]byte{0xff})
 	return b.String()
 }
 
@@ -402,8 +395,8 @@ func (rom *romState) initBanks() {
 	// with the number of checks.
 	roomTreasureBank := byte(sora(rom.game, 0x3f, 0x38).(int))
 	numOwlIds := sora(rom.game, 0x1e, 0x14).(int)
-	rom.replaceRaw(address{0x06, 0}, "collectPropertiesTable",
-		makeCollectPropertiesTable(rom.itemSlots))
+	rom.replaceRaw(address{0x06, 0}, "checkIndexTable",
+		makeCheckIndexTable(rom.itemSlots))
 	rom.replaceRaw(address{roomTreasureBank, 0}, "roomTreasures",
 		makeRoomTreasureTable(rom.game, rom.itemSlots))
 	rom.replaceRaw(address{0x3f, 0}, "owlTextOffsets",

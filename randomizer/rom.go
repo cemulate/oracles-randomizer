@@ -151,8 +151,8 @@ func (rom *romState) mutate(warpMap map[string]string, seed uint32,
 	rom.codeMutables["multiPlayerNumber"].new[0] = byte(rom.player)
 
 	// regenerate collect mode table to accommodate changes based on contents.
-	rom.codeMutables["collectPropertiesTable"].new =
-		[]byte(makeCollectPropertiesTable(rom.itemSlots))
+	rom.codeMutables["checkIndexTable"].new =
+		[]byte(makeCheckIndexTable(rom.itemSlots))
 
 	// set the text IDs for all rings to $ff (blank), since custom code deals
 	// with text

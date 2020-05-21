@@ -48,6 +48,10 @@ floating:
   # progressive upgrades. call through getTreasureDataBCE or
   # getTreasureDataSprite!
   getTreasureData_body: |
+      call getCheckIdAndParam
+      jr z,.noindex
+      call reverseTreasureLookup
+      .noindex
       ld hl,treasureObjectData
       ld a,b
       add a,a
@@ -91,6 +95,24 @@ floating:
   modifyTreasure: |
       call lookupCollectMode
       push af
+      ld e,42
+      ld a,(de)
+      ld b,a
+      inc de
+      ld a,(de)
+      ld c,a
+      push hl
+      call getCheckIdAndParam
+      pop hl
+      jr z,.noindex
+      call reverseTreasureLookup
+      ld e,42
+      ld a,b
+      ld (de),a
+      inc de
+      ld a,c
+      ld (de),a
+      .noindex
       call upgradeTreasure
       pop af
       ld b,a
