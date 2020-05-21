@@ -132,7 +132,7 @@ func makeRoomTreasureTable(game int, itemSlots map[string]*itemSlot) string {
 			_, err = b.Write([]byte{slot.group, slot.room, 0x30, 0x01})
 		} else {
 			_, err = b.Write([]byte{slot.group, slot.room,
-				slot.treasure.id, slot.treasure.subid})
+				byte(0x80 | (slot.index & 0x7f)), byte(slot.index >> 7)})
 		}
 		if err != nil {
 			panic(err)
