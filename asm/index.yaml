@@ -9,6 +9,7 @@ common:
   # b and c are used to index the table.
   # returns the address of the entry in hl.
   # returns c if the check was looked up.
+  # also sets wNetIndexOut.
   00/lookupCheck: |
       xor a # reset carry
       bit 7,b
@@ -22,8 +23,12 @@ common:
       ret
 
   06/lookupCheck_body: |
-      ld hl,checkIndexTable
       call convertIdsToIndex
+      ld hl,wNetIndexOut
+      ld (hl),b
+      inc hl
+      ld (hl),c
+      ld hl,checkIndexTable
       add hl,bc
       add hl,bc
       add hl,bc

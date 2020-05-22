@@ -3,19 +3,17 @@ local seasons_addrs = {
 	multiPlayerNumber = 0x3f43,
 	wGameState = 0xc2ee,
 	wNetCountIn = 0xc6a1,
+	wNetIndexOut = 0xcbf8,
 	wNetTreasureIn = 0xcbfb,
 	wNetTreasureOut = 0xcbfd,
-	wActiveGroup = 0xcc49,
-	wActiveRoom = 0xcc4c,
 }
 local ages_addrs = {
 	multiPlayerNumber = 0x3f39,
 	wGameState = 0xc2ee,
 	wNetCountIn = 0xc6a9,
+	wNetIndexOut = 0xcbf8,
 	wNetTreasureIn = 0xcbfb,
 	wNetTreasureOut = 0xcbfd,
-	wActiveGroup = 0xcc2d,
-	wActiveRoom = 0xcc30,
 }
 
 local debug = false
@@ -75,15 +73,15 @@ local oracles_ram = {} -- exports RAM controller interface
 local function receive_item(item)
 	if item.to == this_player then
 		if any_element_matches(items_in, function(e)
-			return e.from == item.from and e.room == item.room
+			return e.from == item.from and e.index == item.index
 		end) then
-			console.log(string.format("item from P%d:%04x already received",
-				item.from, item.room))
+			console.log(string.format("item P%d:%04x already received",
+				item.from, item.index))
 		else
 			table.insert(items_in, item)
 			table.insert(ack_queue, {
 				from = item.from,
-				room = item.room,
+				index = item.index,
 			})
 			console.log(string.format("received item from P%d: {%02x, %02x}",
 				item.from, item.id, item.param))
@@ -127,21 +125,21 @@ function oracles_ram.getMessage()
 		memory.writebyte(addrs.wNetTreasureOut + 1, 0)
 		memory.writebyte(addrs.wNetTreasureOut + 2, 0)
 
-		-- send message if room's item hasn't been sent before
-		local room = memory.readbyte(addrs.wActiveGroup) * 0x100 +
-			memory.readbyte(addrs.wActiveRoom)
+		-- send message if item index  hasn't been sent before
+		local index = memory.readbyte(addrs.wNetIndexOut) * 0x100 +
+			memory.readbyte(addrs.wNetIndexOut + 1)
 		if any_element_matches(items_out, function(e)
-			return e.room == room
+			return e.index == index
 		end) then
-			console.log(string.format("item from P%d:%04x already sent",
-				this_player, room))
+			console.log(string.format("item P%d:%04x already sent",
+				this_player, index))
 		else
 			table.insert(out_queue, {
 				from = this_player,
 				to = out_player,
 				id = out_id,
 				param = out_param,
-				room = room,
+				index = index,
 			})
 		end
 	end
@@ -162,7 +160,7 @@ function oracles_ram.getMessage()
 		table.insert(message["a"], ack)
 		if debug then
 			console.log(string.format("DEBUG: sent ack for P%d:%04x",
-				ack.from, ack.room))
+				ack.from, ack.index))
 		end
 	end)
 
@@ -196,10 +194,10 @@ function oracles_ram.processMessage(their_user, message)
 	if message["a"] ~= nil then
 		for _, ack in ipairs(message["a"]) do
 			if remove_first_match(items_unack, function(e)
-				return e.from == ack.from and e.room == ack.room
+				return e.from == ack.from and e.index == ack.index
 			end) ~= nil and debug then
 				console.log(string.format("DEBUG: received ack for P%d:%04x",
-					ack.from, ack.room))
+					ack.from, ack.index))
 			end
 		end
 	end
