@@ -16,8 +16,8 @@ floating:
       ret z
       ld e,INTERAC_MULTI_BYTE
       ld a,(de)
-      ld (wNetPlayerOut),a
       ld hl,wNetTreasureOut
+      ldi (hl),a
       ld (hl),b
       inc hl
       ld (hl),c
@@ -100,13 +100,13 @@ seasons:
       pop hl
       ld a,b
       pop bc
-      jr z,.next
+      jr z,.randomized
       call giveTreasure
       ret
-      .next
+      .randomized
       call giveTreasureCustom
       ld e,42
-      ld a,(de) # subid
+      ld a,(de) # shop item interaction subid
       cp a,0d
       ret nz
       ld hl,c693 # in wObtainedTreasureFlags
@@ -318,7 +318,34 @@ ages:
       ld a,(de)
       cp a,0d
       ld a,b
-      jr nz,.next
+      jr nz,.done
+      push bc
+      call getCheckInfo
+      jr z,.local
+      ld e,a
+      ld a,(multiPlayerNumber)
+      cp e
+      ld a,e
+      jr z,.local
+      push hl
+      ld hl,wNetTreasureOut
+      ldi (hl),a
+      ld (hl),b
+      inc hl
+      ld (hl),c
+      ld c,a
+      ld e,BANK_TREASURE_DATA
+      ld hl,setTextNumberSubstitution
+      call interBankCall
+      pop hl
+      pop bc
+      ld a,TX_REMOTE_ITEM
+      ld (cf0d),a
+      ld a,28
+      ld c,00
+      jr .done
+      .local
+      pop bc
       push hl
       ld e,BANK_TREASURE_DATA
       ld hl,getTreasureDataBCE
@@ -327,7 +354,7 @@ ages:
       ld a,e
       ld (cf0d),a
       ld a,b
-      .next
+      .done
       call handleGetItem
       jp nz,playSound
       ld a,SND_GETITEM

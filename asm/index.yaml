@@ -41,26 +41,28 @@ common:
       ret
 
   # b and c are used to index the table.
-  # returns b and c as the final id and param of the check.
+  # returns a, b, and c, and dest player, id, and param.
   # returns nz if the check was looked up.
-  00/getCheckIdAndParam: |
+  00/getCheckInfo: |
       push de
       ld e,06
-      ld hl,getCheckIdAndParam_body
+      ld hl,getCheckInfo_body
       call interBankCall
       ld a,e
-      and a
+      cp a,ff
       pop de
       ret
 
-  06/getCheckIdAndParam_body: |
+  06/getCheckInfo_body: |
       push bc
       call lookupCheck
       pop bc
-      ld e,00
+      ld e,ff
       ret nc
-      inc e
       ld b,(hl)
       inc hl
       ld c,(hl)
+      inc hl
+      inc hl
+      ld e,(hl)
       ret

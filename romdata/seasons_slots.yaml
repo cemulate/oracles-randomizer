@@ -177,25 +177,21 @@ shop, 150 rupees:
   room: 0x03a6
   maptile: 0xe6
   addr: {bank: 0x08, addr: 0x4ce8}
-  local: true
 member's shop 1:
   treasure: satchel
   room: 0x03b0
   maptile: 0xe6
   addr: {bank: 0x08, addr: 0x4cce}
-  local: true
 member's shop 2:
   treasure: gasha seed
   room: 0x03b0
   maptile: 0xe6
   addr: {bank: 0x08, addr: 0x4cd2}
-  local: true
 member's shop 3:
   treasure: treasure map
   room: 0x03b0
   maptile: 0xe6
   addr: {bank: 0x08, addr: 0x4cd8}
-  local: true
 
 # subrosia
 #
@@ -243,7 +239,6 @@ temple of seasons:
   maptile: 0xb0
   ids: [{bank: 0x15, addr: 0x70ce}]
   subids: [{bank: 0x15, addr: 0x70cc}]
-  local: true
 subrosia seaside:
   treasure: star ore
   room: 0x0166
@@ -271,19 +266,16 @@ subrosia market, 1st item:
   room: 0x03a0
   maptile: 0xb0
   addr: {bank: 0x09, addr: 0x77da}
-  local: true
 subrosia market, 2nd item:
   treasure: rare peach stone
   room: 0x03a0
   maptile: 0xb0
   addr: {bank: 0x09, addr: 0x77e2}
-  local: true
 subrosia market, 5th item:
   treasure: member's card
   room: 0x03a0
   maptile: 0xb0
   addr: {bank: 0x09, addr: 0x77f4}
-  local: true
 great furnace:
   treasure: hard ore
   room: 0x038e

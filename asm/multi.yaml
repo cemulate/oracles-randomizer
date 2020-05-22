@@ -34,7 +34,10 @@ floating:
   subMultiworldText: |
       call getMultiworldItemDest
       jr z,.local
+      push bc
+      ld c,a
       call setTextNumberSubstitution
+      pop bc
       inc hl
       ld a,TX_REMOTE_ITEM
       jr .done
@@ -60,8 +63,9 @@ floating:
       pop de
       ret
 
-  # conerts a to BCD and loads it into wTextNumberSubstitution.
+  # conerts c to BCD and loads it into wTextNumberSubstitution.
   setTextNumberSubstitution: |
+      ld a,c
       push hl
       ld hl,wTextNumberSubstitution
       inc hl

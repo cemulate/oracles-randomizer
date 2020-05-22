@@ -1,21 +1,19 @@
 local addrs = nil
 local seasons_addrs = {
-	multiPlayerNumber = 0x3f42,
+	multiPlayerNumber = 0x3f43,
 	wGameState = 0xc2ee,
 	wNetCountIn = 0xc6a1,
 	wNetTreasureIn = 0xcbfb,
-	wNetPlayerOut = 0xcbfd,
-	wNetTreasureOut = 0xcbfe,
+	wNetTreasureOut = 0xcbfd,
 	wActiveGroup = 0xcc49,
 	wActiveRoom = 0xcc4c,
 }
 local ages_addrs = {
-	multiPlayerNumber = 0x3f38,
+	multiPlayerNumber = 0x3f39,
 	wGameState = 0xc2ee,
 	wNetCountIn = 0xc6a9,
 	wNetTreasureIn = 0xcbfb,
-	wNetPlayerOut = 0xcbfd,
-	wNetTreasureOut = 0xcbfe,
+	wNetTreasureOut = 0xcbfd,
 	wActiveGroup = 0xcc2d,
 	wActiveRoom = 0xcc30,
 }
@@ -120,14 +118,14 @@ function oracles_ram.getMessage()
 	local message = {}
 
 	-- buffered treasure out? add to item out queue
-	local out_player = memory.readbyte(addrs.wNetPlayerOut)
+	local out_player = memory.readbyte(addrs.wNetTreasureOut)
 	if out_player ~= 0 then
 		-- get and clear vars
-		local out_id = memory.readbyte(addrs.wNetTreasureOut)
-		local out_param = memory.readbyte(addrs.wNetTreasureOut + 1)
-		memory.writebyte(addrs.wNetPlayerOut, 0)
+		local out_id = memory.readbyte(addrs.wNetTreasureOut + 1)
+		local out_param = memory.readbyte(addrs.wNetTreasureOut + 2)
 		memory.writebyte(addrs.wNetTreasureOut, 0)
 		memory.writebyte(addrs.wNetTreasureOut + 1, 0)
+		memory.writebyte(addrs.wNetTreasureOut + 2, 0)
 
 		-- send message if room's item hasn't been sent before
 		local room = memory.readbyte(addrs.wActiveGroup) * 0x100 +

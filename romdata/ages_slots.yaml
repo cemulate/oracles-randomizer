@@ -54,7 +54,6 @@ shop, 150 rupees:
   room: 0x025e
   maptile: 0x68
   addr: {bank: 0x09, addr: 0x4511}
-  local: true
 defeat great moblin:
   treasure: bomb flower
   room: 0x0009

@@ -48,7 +48,7 @@ floating:
   # progressive upgrades. call through getTreasureDataBCE or
   # getTreasureDataSprite!
   getTreasureData_body: |
-      call getCheckIdAndParam
+      call getCheckInfo
       jr z,.noindex
       call reverseTreasureLookup
       .noindex
@@ -102,7 +102,7 @@ floating:
       ld a,(de)
       ld c,a
       push hl
-      call getCheckIdAndParam
+      call getCheckInfo
       pop hl
       jr z,.noindex
       call reverseTreasureLookup
@@ -137,19 +137,46 @@ floating:
       ret
 
 seasons:
-  # this is a replacement for giveTreasure that accounts for item progression.
-  # call through giveTreasureCustom or giveTreasureCustomSilent, since this
-  # function doesn't xor the a that it returns. importantly, this replacement
-  # treats c as a subID, not a param, so this should *not* be called by
-  # non-randomized whatevers.
+  # this is a replacement for giveTreasure that accounts for item index and
+  # progression. call through giveTreasureCustom or giveTreasureCustomSilent,
+  # since this function doesn't xor the a that it returns. importantly, this
+  # replacement treats c as a subid/index, not a param, so this should *not* be
+  # called by non-randomized whatevers.
   00/giveTreasureCustom_body: |
       ld b,a
+      push bc
+      call getCheckInfo
+      jr z,.local
+      ld e,a
+      ld a,(multiPlayerNumber)
+      cp e
+      ld a,e
+      jr nz,.remote
+      .local
+      pop bc
       push hl
       ld e,BANK_TREASURE_DATA
       ld hl,getTreasureDataBCE
       call interBankCall
       pop hl
       ld a,b
+      jp giveTreasure
+      .remote
+      push hl
+      ld hl,wNetTreasureOut
+      ldi (hl),a
+      ld (hl),b
+      inc hl
+      ld (hl),c
+      ld c,a
+      ld e,BANK_TREASURE_DATA
+      ld hl,setTextNumberSubstitution
+      call interBankCall
+      pop hl
+      pop bc
+      ld e,TX_REMOTE_ITEM
+      ld a,28
+      ld c,00
       jp giveTreasure
 
   # just gives the treasure, no sound or text.
@@ -161,11 +188,10 @@ seasons:
   # gives the treasure, plays its sound, and shows its text.
   00/giveTreasureCustom: |
       call giveTreasureCustom_body
-      jr z,.noSound
+      ld a,SND_GETITEM
       push hl
       call playSound
       pop hl
-      .noSound
       ld a,e
       cp a,ff
       ret z
