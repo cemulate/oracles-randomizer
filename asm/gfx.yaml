@@ -113,7 +113,7 @@ common:
       push bc
       push de
       ld b,3
-      ld de,cff0
+      ld de,wCustomGfxBuffer
       call copyMemory
       push de
       pop hl

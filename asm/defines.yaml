@@ -132,6 +132,7 @@ common:
     define wScreenTransitionDirection,cd02
     define wScreenOffsetY,cd08
     define wScreenShakeCounterY,cd18
+    define wCustomGfxBuffer,cff0
     define w1Link.state,d004
     define w1Link.angle,d009
     define w1Link.yh,d00b

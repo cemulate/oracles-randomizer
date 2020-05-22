@@ -84,8 +84,7 @@ type rawSlot struct {
 	// optional additional rooms
 	MoreRooms []uint16
 
-	Local bool
-	Tree  bool
+	Tree bool
 }
 
 // like address, but has exported fields for loading from yaml.
@@ -128,7 +127,7 @@ func (rom *romState) loadSlots() map[string]*itemSlot {
 			group:     byte(raw.Room >> 8),
 			room:      byte(raw.Room),
 			moreRooms: raw.MoreRooms,
-			localOnly: raw.Local || raw.Tree || raw.Dummy,
+			localOnly: raw.Tree || raw.Dummy,
 			tree:      raw.Tree,
 		}
 
