@@ -109,7 +109,7 @@ floating:
       jp interactionCode60
 
 common:
-  00/multiPlayerNumber: db 00
+  00/3fff/multiPlayerNumber: db 00
 
   # returns nz if the file is part of a multiworld seed.
   00/checkIsFileMultiworld: |
