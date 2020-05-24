@@ -24,11 +24,9 @@ common:
       ret
 
   06/lookupCollectMode_body: |
-      ld hl,wNetCollect
-      ld e,(hl)
-      xor a
-      ld (hl),a
-      ld a,e
+      ld e,71
+      ld a,(de)
+      ld e,a
       and a
       ret nz
       ld e,42

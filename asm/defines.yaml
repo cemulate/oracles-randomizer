@@ -122,7 +122,6 @@ common:
     define wInventorySubmenu1CursorPos,cbd1
     define wRingMenu_mode,cbd3
     define wNetIndexOut,cbf8
-    define wNetCollect,cbfa
     define wNetTreasureIn,cbfb # id, param
     define wNetTreasureOut,cbfd # player, id, param
     define wIsLinkedGame,cc01
