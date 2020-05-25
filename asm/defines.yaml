@@ -161,6 +161,7 @@ seasons:
     define SEASON_AUTUMN,02 # oracles-disasm calls this SEASON_FALL but i refuse
     define SEASON_WINTER,03
     define STARTING_TREE_MAP_INDEX,f8
+    define DUMMY_RING_PARAM,01
 
     # hram
     define hBrokenTilePosition,93
@@ -273,6 +274,7 @@ ages:
     define BANK_OWL_TEXT,38
     define BANK_ROOM_TREASURES,38
     define STARTING_TREE_MAP_INDEX,78
+    define DUMMY_RING_PARAM,09
 
     # hram
     define hDirtyBgPalettes,a6

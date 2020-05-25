@@ -73,7 +73,7 @@ floating:
       inc hl
       jp getUpgradedTreasure
 
-  # load fianl treasure ID, param, and text into b, c, and e.
+  # load final treasure ID, param, and text into b, c, and e.
   getTreasureDataBCE: |
       call getTreasureData_body
       ld c,(hl)
@@ -105,10 +105,16 @@ floating:
       call getCheckInfo
       pop hl
       jr z,.noindex
-      call reverseTreasureLookup
       ld e,42
       ld a,b
       ld (de),a
+      cp a,TREASURE_RING
+      jr nz,.notRing
+      ld e,74
+      ld a,c
+      ld (de),a
+      .notRing
+      call reverseTreasureLookup
       inc de
       ld a,c
       ld (de),a
