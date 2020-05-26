@@ -48,6 +48,10 @@ floating:
   # progressive upgrades. call through getTreasureDataBCE or
   # getTreasureDataSprite!
   getTreasureData_body: |
+      call getCheckInfo
+      jr z,.noindex
+      call reverseTreasureLookup
+      .noindex
       ld hl,treasureObjectData
       ld a,b
       add a,a
@@ -69,8 +73,18 @@ floating:
       inc hl
       jp getUpgradedTreasure
 
-  # load fianl treasure ID, param, and text into b, c, and e.
+  # load final treasure ID, param, and text into b, c, and e.
   getTreasureDataBCE: |
+      push bc
+      call getCheckInfo
+      jr z,.nocross
+      and a,80
+      jr z,.nocross
+      pop af # jank way to discard bc
+      ld e,ff
+      ret
+      pop bc
+      .nocross
       call getTreasureData_body
       ld c,(hl)
       inc hl
@@ -79,6 +93,12 @@ floating:
 
   # load final treasure sprite into e.
   getTreasureDataSprite: |
+      push bc
+      call getCheckInfo
+      pop bc
+      and a,80
+      ld e,CROSS_SPRITE_INDEX
+      ret nz
       call getTreasureData_body
       inc hl
       inc hl
@@ -91,6 +111,30 @@ floating:
   modifyTreasure: |
       call lookupCollectMode
       push af
+      ld e,42
+      ld a,(de)
+      ld b,a
+      inc de
+      ld a,(de)
+      ld c,a
+      push hl
+      call getCheckInfo
+      pop hl
+      jr z,.noindex
+      ld e,42
+      ld a,b
+      ld (de),a
+      cp a,TREASURE_RING
+      jr nz,.notRing
+      ld e,74
+      ld a,c
+      ld (de),a
+      .notRing
+      call reverseTreasureLookup
+      inc de
+      ld a,c
+      ld (de),a
+      .noindex
       call upgradeTreasure
       pop af
       ld b,a
@@ -115,19 +159,47 @@ floating:
       ret
 
 seasons:
-  # this is a replacement for giveTreasure that accounts for item progression.
-  # call through giveTreasureCustom or giveTreasureCustomSilent, since this
-  # function doesn't xor the a that it returns. importantly, this replacement
-  # treats c as a subID, not a param, so this should *not* be called by
-  # non-randomized whatevers.
+  # this is a replacement for giveTreasure that accounts for item index and
+  # progression. call through giveTreasureCustom or giveTreasureCustomSilent,
+  # since this function doesn't xor the a that it returns. importantly, this
+  # replacement treats c as a subid/index, not a param, so this should *not* be
+  # called by non-randomized whatevers.
   00/giveTreasureCustom_body: |
       ld b,a
+      push bc
+      call getCheckInfo
+      jr z,.local
+      ld e,a
+      ld a,(multiPlayerNumber)
+      cp e
+      ld a,e
+      jr nz,.remote
+      .local
+      pop bc
       push hl
       ld e,BANK_TREASURE_DATA
       ld hl,getTreasureDataBCE
       call interBankCall
       pop hl
       ld a,b
+      jp giveTreasure
+      .remote
+      push hl
+      ld hl,wNetTreasureOut
+      and a,7f
+      ldi (hl),a
+      ld (hl),b
+      inc hl
+      ld (hl),c
+      ld c,a
+      ld e,BANK_TREASURE_DATA
+      ld hl,setTextNumberSubstitution
+      call interBankCall
+      pop hl
+      pop bc
+      ld e,TX_REMOTE_ITEM
+      ld a,28
+      ld c,00
       jp giveTreasure
 
   # just gives the treasure, no sound or text.
@@ -139,11 +211,10 @@ seasons:
   # gives the treasure, plays its sound, and shows its text.
   00/giveTreasureCustom: |
       call giveTreasureCustom_body
-      jr z,.noSound
+      ld a,SND_GETITEM
       push hl
       call playSound
       pop hl
-      .noSound
       ld a,e
       cp a,ff
       ret z

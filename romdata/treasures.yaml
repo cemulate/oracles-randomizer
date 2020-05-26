@@ -1,6 +1,6 @@
-# high byte is id, low byte is subid. for some treasures subid only determines
-# collect mode, which doesn't matter for these purposes since collect mode is
-# (currently) set based on other things.
+# these numbers are {[param, ]id, subid}. for some treasures subid only
+# determines collect mode, which doesn't matter for these purposes since
+# collect mode is (currently) set based on other things.
 
 common:
   # equip items
@@ -72,36 +72,36 @@ common:
 
 seasons:
   # equip items
-  spring: 0x0702
-  summer: 0x0703
-  autumn: 0x0704
-  winter: 0x0705
+  spring: 0x000702
+  summer: 0x010703
+  autumn: 0x020704
+  winter: 0x030705
   magnet gloves: 0x0800
-  slingshot: 0x1300
+  slingshot: 0x011300
   fool's ore: 0x1e00
 
   # rupees
-  rupees, 1: 0x2800
-  rupees, 5: 0x2801
+  rupees, 1: 0x012800
+  rupees, 5: 0x032801
 
   # hearts
-  rare peach stone: 0x2b02 # subrosia market
+  rare peach stone: 0x012b02 # subrosia market
 
   # dungeon items
-  d6 small key: 0x3003
+  d6 small key: 0x013003
   d6 compass: 0x3202
   d6 dungeon map: 0x3302
 
   # rings
-  green joy ring: 0x2d01
-  moblin ring: 0x2d05
-  steadfast ring: 0x2d06
-  blast ring: 0x2d07
-  rang ring L-1: 0x2d08
-  octo ring: 0x2d09
-  quicksand ring: 0x2d0a
-  armor ring L-2: 0x2d0b
-  subrosian ring: 0x2d10
+  green joy ring: 0x292d01
+  moblin ring: 0x2b2d05
+  steadfast ring: 0x102d06
+  blast ring: 0x0c2d07
+  rang ring L-1: 0x0d2d08
+  octo ring: 0x2a2d09
+  quicksand ring: 0x232d0a
+  armor ring L-2: 0x052d0b
+  subrosian ring: 0x2d2d10
 
   # page 2
   gnarled key: 0x4200
@@ -125,33 +125,33 @@ seasons:
 
 ages:
   cane: 0x0400
-  switch hook: 0x0a00
-  seed shooter: 0x0f00
+  switch hook: 0x010a00
+  seed shooter: 0x010f00
   harp: 0x2500 # actually tune of echoes, which gives harp as well
 
   # rupees
   rupees, 200: 0x2808
 
   # rings
-  gold joy ring: 0x2d16
-  armor ring L-1: 0x2d17
-  light ring L-1: 0x2d19
-  blue luck ring: 0x2d1a
-  power ring L-2: 0x2d1b
-  gold luck ring: 0x2d1c
-  pegasus ring: 0x2d1e
-  green luck ring: 0x2d20
-  green holy ring: 0x2d21
-  red holy ring: 0x2d22
-  whisp ring: 0x2d23
-  whimsical ring: 0x2d25
-  toss ring: 0x2d26
-  blue ring: 0x2d27
-  like-like ring: 0x2d28
+  gold joy ring: 0x262d16
+  armor ring L-1: 0x042d17
+  light ring L-1: 0x172d19
+  blue luck ring: 0x1b2d1a
+  power ring L-2: 0x022d1b
+  gold luck ring: 0x1c2d1c
+  pegasus ring: 0x112d1e
+  green luck ring: 0x1a2d20
+  green holy ring: 0x1e2d21
+  red holy ring: 0x202d22
+  whisp ring: 0x392d23
+  whimsical ring: 0x3e2d25
+  toss ring: 0x122d26
+  blue ring: 0x082d27
+  like-like ring: 0x2c2d28
 
   # dungeon items
-  d6 present small key: 0x3003
-  d6 past small key: 0x3003
+  d6 present small key: 0x013003
+  d6 past small key: 0x013003
   d6 present compass: 0x3202
   d6 past compass: 0x3202
   d6 present dungeon map: 0x3302

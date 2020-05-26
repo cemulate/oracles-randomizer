@@ -8,7 +8,7 @@ floating:
   handleGetMultiworldItem: |
       ld e,INTERAC_MULTI_BYTE
       ld a,(de)
-      and a
+      and a,7f
       ret z
       ld e,a
       ld a,(multiPlayerNumber)
@@ -16,8 +16,9 @@ floating:
       ret z
       ld e,INTERAC_MULTI_BYTE
       ld a,(de)
-      ld (wNetPlayerOut),a
+      and a,7f
       ld hl,wNetTreasureOut
+      ldi (hl),a
       ld (hl),b
       inc hl
       ld (hl),c
@@ -100,13 +101,13 @@ seasons:
       pop hl
       ld a,b
       pop bc
-      jr z,.next
+      jr z,.randomized
       call giveTreasure
       ret
-      .next
+      .randomized
       call giveTreasureCustom
       ld e,42
-      ld a,(de) # subid
+      ld a,(de) # shop item interaction subid
       cp a,0d
       ret nz
       ld hl,c693 # in wObtainedTreasureFlags
@@ -121,16 +122,6 @@ seasons:
   # don't refill seeds when getting the first member's shop item.
   08/4c02/: nop; nop; nop
 
-  # star ore item doesn't normally get a subid. values are replaced at
-  # randomization.
-  08/setStarOreIds: |
-      inc l
-      ld (hl),TREASURE_STAR_ORE
-      inc l
-      ld (hl),00
-      ret
-  08/62f2/: call setStarOreIds
-
   # ignore sword level for lost woods pedestal.
   08/7e62/: ld a,01
 
@@ -140,8 +131,9 @@ seasons:
       push af
       push de
       push hl
+      ld e,02
       ld hl,handleGetItem_body
-      call callBank2
+      call interBankCall
       pop hl
       pop de
       pop af
@@ -251,16 +243,6 @@ seasons:
   0b/75c6/: db jumpifitemobtained,TREASURE_PUNCH
   15/62ac/: jr 05
 
-  # hard ore item doesn't normally get a subid. values are replaced at
-  # randomization.
-  15/setHardOreIds: |
-      inc l
-      ld (hl),52
-      inc l
-      ld (hl),00
-      ret
-  15/5b83/: call setHardOreIds
-
   # don't display normal fixed text for temple of seasons item.
   15/70be/: nop; nop; nop
 
@@ -338,7 +320,35 @@ ages:
       ld a,(de)
       cp a,0d
       ld a,b
-      jr nz,.next
+      jr nz,.done
+      push bc
+      call getCheckInfo
+      jr z,.local
+      ld e,a
+      ld a,(multiPlayerNumber)
+      cp e
+      ld a,e
+      jr z,.local
+      push hl
+      ld hl,wNetTreasureOut
+      and a,7f
+      ldi (hl),a
+      ld (hl),b
+      inc hl
+      ld (hl),c
+      ld c,a
+      ld e,BANK_TREASURE_DATA
+      ld hl,setTextNumberSubstitution
+      call interBankCall
+      pop hl
+      pop bc
+      ld a,TX_REMOTE_ITEM
+      ld (cf0d),a
+      ld a,28
+      ld c,00
+      jr .done
+      .local
+      pop bc
       push hl
       ld e,BANK_TREASURE_DATA
       ld hl,getTreasureDataBCE
@@ -347,7 +357,7 @@ ages:
       ld a,e
       ld (cf0d),a
       ld a,b
-      .next
+      .done
       call handleGetItem
       jp nz,playSound
       ld a,SND_GETITEM

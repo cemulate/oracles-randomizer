@@ -14,15 +14,23 @@ type itemSlot struct {
 	moreRooms                        []uint16 // high = group, low = room
 	mapTile                          byte     // overworld map coords, yx
 	localOnly                        bool     // multiworld
+	index                            uint16
+	tree                             bool
 }
 
 // implementes `mutate` from the `mutable` interface.
 func (mut *itemSlot) mutate(b []byte) {
-	for _, addr := range mut.idAddrs {
-		b[addr.fullOffset()] = mut.treasure.id
-	}
-	for _, addr := range mut.subidAddrs {
-		b[addr.fullOffset()] = mut.treasure.subid
+	if mut.tree {
+		for _, addr := range mut.idAddrs {
+			b[addr.fullOffset()] = mut.treasure.id
+		}
+	} else {
+		for _, addr := range mut.idAddrs {
+			b[addr.fullOffset()] = byte(0x80 | (mut.index & 0x7f))
+		}
+		for _, addr := range mut.subidAddrs {
+			b[addr.fullOffset()] = byte(mut.index >> 7)
+		}
 	}
 	mut.treasure.mutate(b)
 }
@@ -76,7 +84,7 @@ type rawSlot struct {
 	// optional additional rooms
 	MoreRooms []uint16
 
-	Local bool // dummy implies true
+	Tree bool
 }
 
 // like address, but has exported fields for loading from yaml.
@@ -119,7 +127,8 @@ func (rom *romState) loadSlots() map[string]*itemSlot {
 			group:     byte(raw.Room >> 8),
 			room:      byte(raw.Room),
 			moreRooms: raw.MoreRooms,
-			localOnly: raw.Local || raw.Dummy,
+			localOnly: raw.Tree || raw.Dummy,
+			tree:      raw.Tree,
 		}
 
 		// unspecified map tile = assume overworld

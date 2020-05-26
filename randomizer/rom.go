@@ -119,13 +119,7 @@ func (rom *romState) mutate(warpMap map[string]string, seed uint32,
 		rom.setTreasureMapData()
 
 		// explicitly set these addresses and IDs after their functions
-		codeAddr := rom.codeMutables["setStarOreIds"].addr
-		rom.itemSlots["subrosia seaside"].idAddrs[0].offset = codeAddr.offset + 2
-		rom.itemSlots["subrosia seaside"].subidAddrs[0].offset = codeAddr.offset + 5
-		codeAddr = rom.codeMutables["setHardOreIds"].addr
-		rom.itemSlots["great furnace"].idAddrs[0].offset = codeAddr.offset + 2
-		rom.itemSlots["great furnace"].subidAddrs[0].offset = codeAddr.offset + 5
-		codeAddr = rom.codeMutables["script_diverGiveItem"].addr
+		codeAddr := rom.codeMutables["script_diverGiveItem"].addr
 		rom.itemSlots["master diver's reward"].idAddrs[0].offset = codeAddr.offset + 1
 		rom.itemSlots["master diver's reward"].subidAddrs[0].offset = codeAddr.offset + 2
 		codeAddr = rom.codeMutables["createMtCuccoItem"].addr
@@ -145,14 +139,14 @@ func (rom *romState) mutate(warpMap map[string]string, seed uint32,
 
 	rom.setBossItemAddrs()
 	rom.setSeedData()
-	rom.setRoomTreasureData()
 	rom.setFileSelectText(optString(seed, ropts, "+"))
 	rom.attachText()
 	rom.codeMutables["multiPlayerNumber"].new[0] = byte(rom.player)
 
 	// regenerate collect mode table to accommodate changes based on contents.
-	rom.codeMutables["collectPropertiesTable"].new =
-		[]byte(makeCollectPropertiesTable(rom.itemSlots))
+	rom.codeMutables["checkIndexTable"].new =
+		[]byte(makeCheckIndexTable(rom.itemSlots))
+	rom.setRoomTreasureData()
 
 	// set the text IDs for all rings to $ff (blank), since custom code deals
 	// with text
