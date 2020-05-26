@@ -63,14 +63,3 @@ common:
       ld a,b
       pop bc
       ret
-
-seasons:
-  # call a function hl in bank 02, preserving af. e can't be used as a
-  # parameter to that function, but it can be returned. this function only
-  # exists because banks 08 and 09 are so tight on space.
-  00/callBank2: |
-      push af
-      ld e,02
-      call interBankCall
-      pop af
-      ret

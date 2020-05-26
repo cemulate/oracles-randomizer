@@ -84,8 +84,14 @@ func writeFilteredIndexTable(b *strings.Builder, itemSlots map[string]*itemSlot,
 			mode &= 0xf8
 		}
 
-		if _, err := b.Write([]byte{slot.treasure.id, slot.treasure.param, mode,
-			slot.player}); err != nil {
+		// set bit 7 of player for items which aren't in this game
+		player := slot.player
+		if slot.treasure.foreign {
+			player |= 0x80
+		}
+
+		if _, err := b.Write([]byte{slot.treasure.id,
+			slot.treasure.param, mode, player}); err != nil {
 			panic(err)
 		}
 	}
@@ -337,7 +343,7 @@ func (rom *romState) attachText() {
 	}
 
 	// insert randomized item names into shop text
-	shopNames := loadShopNames(gameNames[rom.game])
+	shopNames := loadShopNames()
 	shopMap := map[string]string{
 		"shopFluteText": "shop, 150 rupees",
 	}
@@ -376,13 +382,14 @@ var articleRegexp = regexp.MustCompile("^(an?|the) ")
 
 // return a map of internal item names to text that should be displayed for the
 // item in shops.
-func loadShopNames(game string) map[string]string {
+func loadShopNames() map[string]string {
 	m := make(map[string]string)
 
 	// load names used for owl hints
 	itemFiles := []string{
 		"/hints/common_items.yaml",
-		fmt.Sprintf("/hints/%s_items.yaml", game),
+		"/hints/seasons_items.yaml",
+		"/hints/ages_items.yaml",
 	}
 	for _, filename := range itemFiles {
 		if err := yaml.Unmarshal(

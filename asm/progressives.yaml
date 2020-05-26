@@ -75,6 +75,16 @@ floating:
 
   # load final treasure ID, param, and text into b, c, and e.
   getTreasureDataBCE: |
+      push bc
+      call getCheckInfo
+      jr z,.nocross
+      and a,80
+      jr z,.nocross
+      pop af # jank way to discard bc
+      ld e,ff
+      ret
+      pop bc
+      .nocross
       call getTreasureData_body
       ld c,(hl)
       inc hl
@@ -83,6 +93,12 @@ floating:
 
   # load final treasure sprite into e.
   getTreasureDataSprite: |
+      push bc
+      call getCheckInfo
+      pop bc
+      and a,80
+      ld e,CROSS_SPRITE_INDEX
+      ret nz
       call getTreasureData_body
       inc hl
       inc hl
@@ -170,6 +186,7 @@ seasons:
       .remote
       push hl
       ld hl,wNetTreasureOut
+      and a,7f
       ldi (hl),a
       ld (hl),b
       inc hl

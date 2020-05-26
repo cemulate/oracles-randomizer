@@ -8,7 +8,7 @@ floating:
   handleGetMultiworldItem: |
       ld e,INTERAC_MULTI_BYTE
       ld a,(de)
-      and a
+      and a,7f
       ret z
       ld e,a
       ld a,(multiPlayerNumber)
@@ -16,6 +16,7 @@ floating:
       ret z
       ld e,INTERAC_MULTI_BYTE
       ld a,(de)
+      and a,7f
       ld hl,wNetTreasureOut
       ldi (hl),a
       ld (hl),b
@@ -130,8 +131,9 @@ seasons:
       push af
       push de
       push hl
+      ld e,02
       ld hl,handleGetItem_body
-      call callBank2
+      call interBankCall
       pop hl
       pop de
       pop af
@@ -329,6 +331,7 @@ ages:
       jr z,.local
       push hl
       ld hl,wNetTreasureOut
+      and a,7f
       ldi (hl),a
       ld (hl),b
       inc hl

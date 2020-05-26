@@ -53,7 +53,7 @@ floating:
       push de
       ld e,INTERAC_MULTI_BYTE
       ld a,(de)
-      and a
+      and a,7f
       ld e,a
       ld a,(multiPlayerNumber)
       jr z,.done

@@ -41,6 +41,8 @@ type treasure struct {
 	param  byte // parameter value to use for giveTreasure
 	text   byte
 	sprite byte
+
+	foreign bool // cross-game only
 }
 
 // returns a slice of consecutive bytes of treasure data, as they would appear
@@ -94,13 +96,13 @@ func getTreasureAddr(b []byte, game int, id, subid byte) address {
 // return a map of treasure names to treasure data. if b is nil, only "static"
 // data is loaded.
 func loadTreasures(b []byte, game int) map[string]*treasure {
-	allRawIds := make(map[string]map[string]uint16)
+	allRawIds := make(map[string]map[string]uint32)
 	if err := yaml.Unmarshal(
 		FSMustByte(false, "/romdata/treasures.yaml"), allRawIds); err != nil {
 		panic(err)
 	}
 
-	rawIds := make(map[string]uint16)
+	rawIds := make(map[string]uint32)
 	for k, v := range allRawIds["common"] {
 		rawIds[k] = v
 	}
@@ -109,6 +111,18 @@ func loadTreasures(b []byte, game int) map[string]*treasure {
 	}
 
 	m := make(map[string]*treasure)
+
+	// do foreign treasures first. these will be overwritten by native
+	// treasures afterward if ones have the same name
+	for name, rawId := range allRawIds[sora(game, "ages", "seasons").(string)] {
+		m[name] = &treasure{
+			displayName: name,
+			id:          byte(rawId >> 8),
+			param:       byte(rawId >> 16),
+			foreign:     true,
+		}
+	}
+
 	for name, rawId := range rawIds {
 		t := &treasure{
 			displayName: name,

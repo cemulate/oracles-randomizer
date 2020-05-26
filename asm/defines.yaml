@@ -162,6 +162,7 @@ seasons:
     define SEASON_WINTER,03
     define STARTING_TREE_MAP_INDEX,f8
     define DUMMY_RING_PARAM,01
+    define CROSS_SPRITE_INDEX,50
 
     # hram
     define hBrokenTilePosition,93
@@ -275,6 +276,7 @@ ages:
     define BANK_ROOM_TREASURES,38
     define STARTING_TREE_MAP_INDEX,78
     define DUMMY_RING_PARAM,09
+    define CROSS_SPRITE_INDEX,59
 
     # hram
     define hDirtyBgPalettes,a6
