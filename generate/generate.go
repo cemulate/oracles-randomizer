@@ -4,6 +4,7 @@ package main
 // directory so that it's `go run`-able by `go generate`.
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -69,7 +70,8 @@ func generateVersion() {
 	}
 
 	// output should be "tags/[tag]" or "heads/[branch]"
-	version := strings.SplitN(strings.TrimSpace(string(output)), "/", 2)[1]
+	version := fmt.Sprintf(`"%s"`,
+		strings.SplitN(strings.TrimSpace(string(output)), "/", 2)[1])
 
 	s := strings.ReplaceAll(versionTemplate, "{{version}}", version)
 	err = ioutil.WriteFile("randomizer/version.go", []byte(s), 0644)
