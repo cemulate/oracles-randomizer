@@ -78,7 +78,7 @@ d2 entrance: [deku forest, or: [bombs, currents]]
 crescent past: {or: [raft, [lynna city, mermaid suit],
     [crescent present west, currents]]}
 tokay crystal cave: [crescent past, or: [shovel, break crystal], feather]
-tokay bomb cave: [crescent past, bracelet, bombs]
+tokay bomb cave: [crescent past, or: [bracelet, ages], bombs]
 wild tokay game: [crescent past, bombs, bracelet]
 # can get the warp point by swimming under crescent island, but that's pretty
 # unintuitive.
