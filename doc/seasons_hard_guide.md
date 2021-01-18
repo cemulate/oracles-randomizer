@@ -72,6 +72,9 @@ for a list of things that are out of logic even in hard.
 
 ## Subrosia
 
+- Jump between north and south Subrosia using cape without pegasus seeds.
+  [[Video 1]](https://cdn.discordapp.com/attachments/523574799750922241/800498664010547250/seasons_subrosia_bombless_capejump1.gif)
+  [[Video 2]](https://cdn.discordapp.com/attachments/523574799750922241/800498716955377674/seasons_subrosia_bombless_capejump2.gif)
 - Bomb jump between the market and furnace areas.
   [[Video]](https://streamable.com/gqsnx)
 

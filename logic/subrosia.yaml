@@ -15,7 +15,7 @@ temple: {or: [
     exit volcanoes east portal,
     [beach, ribbon],
     [beach, feather],
-    [hide and seek, bomb jump 4],
+    [hide and seek, or: [jump 6, [hard, cape]]],
     [bridge, feather]]}
 
 beach: {or: [
@@ -28,7 +28,7 @@ beach: {or: [
 
 hide and seek: [feather, or: [
     exit strange brothers portal, pirate house,
-    [bomb jump 4, or: [temple, bridge]]]]
+    [or: [jump 6, [hard, cape]], or: [temple, bridge]]]]
 
 pirate house: {or: [exit house of pirates portal, [hide and seek, feather]]}
 
@@ -40,7 +40,7 @@ furnace: {or: [
 bridge: {or: [
     [temple, feather],
     [exit volcanoes west portal, bracelet, bomb jump 3],
-    [hide and seek, bomb jump 4]]}
+    [hide and seek, or: [jump 6, [hard, cape]]]]}
 
 subrosian dance hall: [temple]
 temple of seasons: [temple]
