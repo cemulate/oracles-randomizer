@@ -16,7 +16,7 @@ type multiRoute struct {
 
 // returns true iff a given slot/item can be multiworld shuffled
 func isMultiEligible(mr *multiRoute, slot, item *node) bool {
-	return !mr.local[slot] &&
+	return !mr.local[slot] && !strings.Contains(item.name, " ring") &&
 		!strings.HasSuffix(item.name, "small key") &&
 		!strings.HasSuffix(item.name, "boss key") &&
 		!strings.HasSuffix(item.name, "dungeon map") &&

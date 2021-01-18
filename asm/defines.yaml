@@ -121,9 +121,9 @@ common:
     define wMapMenu_cursorIndex,cbb6
     define wInventorySubmenu1CursorPos,cbd1
     define wRingMenu_mode,cbd3
-    define wNetIndexOut,cbf8
-    define wNetTreasureIn,cbfb # id, param
-    define wNetTreasureOut,cbfd # player, id, param
+    define wNetTreasureIn,cbfb
+    define wNetPlayerOut,cbfd
+    define wNetTreasureOut,cbfe
     define wIsLinkedGame,cc01
     define wMenuDisabled,cc02
     define wCutsceneState,cc03
@@ -131,7 +131,6 @@ common:
     define wScreenTransitionDirection,cd02
     define wScreenOffsetY,cd08
     define wScreenShakeCounterY,cd18
-    define wCustomGfxBuffer,cff0
     define w1Link.state,d004
     define w1Link.angle,d009
     define w1Link.yh,d00b
@@ -161,8 +160,6 @@ seasons:
     define SEASON_AUTUMN,02 # oracles-disasm calls this SEASON_FALL but i refuse
     define SEASON_WINTER,03
     define STARTING_TREE_MAP_INDEX,f8
-    define DUMMY_RING_PARAM,01
-    define CROSS_SPRITE_INDEX,50
 
     # hram
     define hBrokenTilePosition,93
@@ -275,8 +272,6 @@ ages:
     define BANK_OWL_TEXT,38
     define BANK_ROOM_TREASURES,38
     define STARTING_TREE_MAP_INDEX,78
-    define DUMMY_RING_PARAM,09
-    define CROSS_SPRITE_INDEX,59
 
     # hram
     define hDirtyBgPalettes,a6

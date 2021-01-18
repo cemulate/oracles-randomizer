@@ -34,10 +34,7 @@ floating:
   subMultiworldText: |
       call getMultiworldItemDest
       jr z,.local
-      push bc
-      ld c,a
       call setTextNumberSubstitution
-      pop bc
       inc hl
       ld a,TX_REMOTE_ITEM
       jr .done
@@ -53,7 +50,7 @@ floating:
       push de
       ld e,INTERAC_MULTI_BYTE
       ld a,(de)
-      and a,7f
+      and a
       ld e,a
       ld a,(multiPlayerNumber)
       jr z,.done
@@ -63,9 +60,8 @@ floating:
       pop de
       ret
 
-  # conerts c to BCD and loads it into wTextNumberSubstitution.
+  # conerts a to BCD and loads it into wTextNumberSubstitution.
   setTextNumberSubstitution: |
-      ld a,c
       push hl
       ld hl,wTextNumberSubstitution
       inc hl
@@ -123,18 +119,8 @@ floating:
       ld (de),a
       ret
 
-  # this is for incoming multiworld rings which have their param set manually
-  keepNonzeroTreasureParam: |
-      inc e
-      ld a,(de)
-      and a
-      ldi a,(hl)
-      ret nz
-      ld (de),a
-      ret
-
 common:
-  00/3fff/multiPlayerNumber: db 00
+  00/multiPlayerNumber: db 00
 
   # returns nz if the file is part of a multiworld seed.
   00/checkIsFileMultiworld: |
@@ -178,24 +164,11 @@ common:
       jr z,.noUpgradeFeather
       ld c,02
       .noUpgradeFeather
-      ld a,b
-      cp a,TREASURE_RING
-      jr nz,.notRing1
-      ld d,c
-      ld c,DUMMY_RING_PARAM
-      .notRing1
       ld e,BANK_TREASURE_DATA
       ld hl,reverseTreasureLookup
       call interBankCall
       call createTreasure
       jr nz,.done
-      ld a,b
-      cp a,TREASURE_RING
-      jr nz,.notRing2
-      ld a,d
-      ld l,74
-      ld (hl),a
-      .notRing2
       ld de,w1Link.yh
       call objectCopyPosition_rawAddress
       ld a,(multiPlayerNumber)
@@ -246,9 +219,6 @@ seasons:
       jp setGlobalFlag
   15/49bc/: jp checkSetFileCompleted
 
-  15/keepNonzeroTreasureParam: /include keepNonzeroTreasureParam
-  15/466c/: call keepNonzeroTreasureParam
-
 ages:
   05/5526/: call checkNetItemBuffer
 
@@ -275,6 +245,3 @@ ages:
   16/keepNonzeroCollectMode: /include keepNonzeroCollectMode
   16/453e/: call keepNonzeroCollectMode
   16/454e/: call subMultiworldText
-
-  16/keepNonzeroTreasureParam: /include keepNonzeroTreasureParam
-  16/454b/: call keepNonzeroTreasureParam

@@ -25,12 +25,8 @@ seasons:
       cp a,01
       ret nz
       call interactionDelete
-      ld e,02
       ld hl,skipVolcanoCutscene
-      push af
-      call interBankCall
-      pop af
-      ret
+      jp callBank2
 
   # use a non-cutscene screen transition for exiting a dungeon via essence, so
   # that overworld music plays, and set maku tree state.

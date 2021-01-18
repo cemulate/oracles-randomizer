@@ -31,31 +31,18 @@ common:
       jp queueDmaTransfer
 
   # overrides the sprite data loaded for certain interactions. this is mostly
-  # used for "non-item" interactions that depict items, like the ones in shops,
-  # and for items not native to the particular game.
+  # used for "non-item" interactions that depict items, like the ones in shops.
   3f/checkLoadCustomSprite: |
       call _interactionGetData
       push af
       push bc
       push hl
-      ld e,42
-      ld a,(de)
-      ld c,a
-      dec e
+      ld e,41
       ld a,(de)
       ld b,a
-      cp a,60
-      jr nz,.notCrossItem
-      ld e,INTERAC_MULTI_BYTE
+      inc e
       ld a,(de)
-      and a,80
-      jr z,.notCrossItem
-      pop hl
-      pop bc
-      pop af
-      ld hl,crossItemSprite
-      ret
-      .notCrossItem
+      ld c,a
       ld e,02
       ld hl,customSpriteJumpTable
       call searchDoubleKey
@@ -126,7 +113,7 @@ common:
       push bc
       push de
       ld b,3
-      ld de,wCustomGfxBuffer
+      ld de,cff0
       call copyMemory
       push de
       pop hl
@@ -288,7 +275,6 @@ seasons:
   3f/67ba/: db 60,14,00 # fool's ore
   3f/67c6/: db 5d,10,26 # rare peach stone
   3f/67c9/: db 65,0c,23 # ribbon
-  3f/67cc/crossItemSprite: db 63,0e,52 # goron vase, ages item placeholder
 
   # also flutes with different palettes? idk how this works in vanilla
   3f/6790/: |
@@ -423,9 +409,6 @@ ages:
       db 7c,16,33
       db 7c,16,23
       db 7c,16,13
-
-  # spring banana, seasons item placeholder
-  3f/67e6/crossItemSprite: db 82,1c,33
 
   # fix the zora scale object palette (to match inventory?)
   3f/67d0/: db 43

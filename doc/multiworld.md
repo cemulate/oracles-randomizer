@@ -19,7 +19,8 @@ Notes and limitations:
 - Up to 99 players for a single seed are supported.
 - Seasons files can't contain Ages-exclusive items even if those items go to
   other players, and vice versa.
-- Rings will always belong to the local player.
+- Rings and shops, as well as a select few other checks, will always belong to
+  the local player.
 - The treasure map in Seasons only displays the locations of your own jewels.
   Jewels that aren't in your game have sparkles at the Tarm gate instead.
 - Finishing a multiworld game (i.e. defeating Onox or Veran) doesn't set

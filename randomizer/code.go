@@ -67,16 +67,13 @@ func (rom *romState) replaceRaw(addr address, label, data string) string {
 	return label
 }
 
-// writes entries to the index table which pass a filter function.
-func writeFilteredIndexTable(b *strings.Builder, itemSlots map[string]*itemSlot,
-	filter func(*itemSlot) bool) {
+// returns a byte table of (group, room, collect mode, player) entries for
+// randomized items. a mode >7f means to use &7f as an index to a jump table
+// for special cases.
+func makeCollectPropertiesTable(itemSlots map[string]*itemSlot) string {
+	b := new(strings.Builder)
 	for _, key := range orderedKeys(itemSlots) {
 		slot := itemSlots[key]
-		if !filter(slot) {
-			continue
-		}
-
-		slot.index = uint16(b.Len() / 4)
 
 		// use no pickup animation for falling small keys
 		mode := slot.collectMode
@@ -84,33 +81,18 @@ func writeFilteredIndexTable(b *strings.Builder, itemSlots map[string]*itemSlot,
 			mode &= 0xf8
 		}
 
-		// set bit 7 of player for items which aren't in this game
-		player := slot.player
-		if slot.treasure.foreign {
-			player |= 0x80
-		}
-
-		if _, err := b.Write([]byte{slot.treasure.id,
-			slot.treasure.param, mode, player}); err != nil {
+		if _, err := b.Write([]byte{slot.group, slot.room, mode, slot.player}); err != nil {
 			panic(err)
 		}
+		for _, groupRoom := range slot.moreRooms {
+			group, room := byte(groupRoom>>8), byte(groupRoom)
+			if _, err := b.Write([]byte{group, room, mode, slot.player}); err != nil {
+				panic(err)
+			}
+		}
 	}
-}
 
-// returns a byte table of {id, param, mode, player} entries for randomized
-// items.
-func makeCheckIndexTable(itemSlots map[string]*itemSlot) string {
-	b := new(strings.Builder)
-
-	// write items without subids addresses first, since those need to have
-	// indexes < 128.
-	writeFilteredIndexTable(b, itemSlots, func(slot *itemSlot) bool {
-		return len(slot.subidAddrs) == 0
-	})
-	writeFilteredIndexTable(b, itemSlots, func(slot *itemSlot) bool {
-		return len(slot.subidAddrs) > 0
-	})
-
+	b.Write([]byte{0xff})
 	return b.String()
 }
 
@@ -138,7 +120,7 @@ func makeRoomTreasureTable(game int, itemSlots map[string]*itemSlot) string {
 			_, err = b.Write([]byte{slot.group, slot.room, 0x30, 0x01})
 		} else {
 			_, err = b.Write([]byte{slot.group, slot.room,
-				byte(0x80 | (slot.index & 0x7f)), byte(slot.index >> 7)})
+				slot.treasure.id, slot.treasure.subid})
 		}
 		if err != nil {
 			panic(err)
@@ -343,7 +325,7 @@ func (rom *romState) attachText() {
 	}
 
 	// insert randomized item names into shop text
-	shopNames := loadShopNames()
+	shopNames := loadShopNames(gameNames[rom.game])
 	shopMap := map[string]string{
 		"shopFluteText": "shop, 150 rupees",
 	}
@@ -382,14 +364,13 @@ var articleRegexp = regexp.MustCompile("^(an?|the) ")
 
 // return a map of internal item names to text that should be displayed for the
 // item in shops.
-func loadShopNames() map[string]string {
+func loadShopNames(game string) map[string]string {
 	m := make(map[string]string)
 
 	// load names used for owl hints
 	itemFiles := []string{
 		"/hints/common_items.yaml",
-		"/hints/seasons_items.yaml",
-		"/hints/ages_items.yaml",
+		fmt.Sprintf("/hints/%s_items.yaml", game),
 	}
 	for _, filename := range itemFiles {
 		if err := yaml.Unmarshal(
@@ -421,8 +402,8 @@ func (rom *romState) initBanks() {
 	// with the number of checks.
 	roomTreasureBank := byte(sora(rom.game, 0x3f, 0x38).(int))
 	numOwlIds := sora(rom.game, 0x1e, 0x14).(int)
-	rom.replaceRaw(address{0x06, 0}, "checkIndexTable",
-		makeCheckIndexTable(rom.itemSlots))
+	rom.replaceRaw(address{0x06, 0}, "collectPropertiesTable",
+		makeCollectPropertiesTable(rom.itemSlots))
 	rom.replaceRaw(address{roomTreasureBank, 0}, "roomTreasures",
 		makeRoomTreasureTable(rom.game, rom.itemSlots))
 	rom.replaceRaw(address{0x3f, 0}, "owlTextOffsets",

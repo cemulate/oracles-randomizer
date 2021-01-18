@@ -4,7 +4,7 @@
 ages:
   # d2: exit into the present if the past entrance is closed.
   # d7: reset water level when exiting (see logic comments).
-  04/handleSpecialExits: |
+  00/handleSpecialExits: |
       ld (wWarpDestIndex),a
       cp a,83
       jr nz,.next
