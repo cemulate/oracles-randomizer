@@ -58,9 +58,10 @@ for a list of things that are out of logic even in hard.
 ## Dungeons
 
 - Reach the item on a "shelf" in the D2 sidescroller by placing a block with
-  the cane, riding the Thwomp, and using seeds or a bomb boost to cross the
-  gap. [[Video (seed)]](https://streamable.com/t88r7)
+  the cane, riding the Thwomp, and using seeds, a bomb boost, or a sword clink
+  to cross the gap. [[Video (seed)]](https://streamable.com/t88r7)
   [[Video (bomb)]](https://www.youtube.com/watch?v=2BwkmYC3mt0)
+  [[Video (sword)]](https://clips.twitch.tv/CalmMoralSushiDAESuppy)
 - Clip through a shutter door in D2 by standing on the button that opens the
   door, pushing a Moblin into the doorway, and switching with the Moblin. You
   need to screen transition immediately after landing; otherwise you'll be
@@ -99,11 +100,15 @@ for a list of things that are out of logic even in hard.
   Darknut across the bridge using sword, then switch hooking it. The last two
   sword slashes before transitioning to the bridge room should be high pitch,
   then mid pitch. [[Video]](https://streamable.com/guma6)
+- Change the colors of gels in the D6 past color room by using mystery seeds
+  instead of jumping over the panel.
 - Walk diagonally across the corners of pits in the D6 present cube puzzle. [No
   video.]
 - Use feather + sword to traverse the D6 present room with the switch that
   changes the floor tile pattern.
   [[Video]](https://clips.twitch.tv/CrunchyBlushingHummingbirdMingLee)
+- Skip a key door and miniboss in D8 by switch hooking a darknut to clip
+  through a block. [[Video]](https://clips.twitch.tv/RudeExcitedFerretWoofer)
 
 ## Not in logic because you could softlock but still cool
 

@@ -12,7 +12,7 @@ nayru's house: [start]
 lynna city: {or: [break bush, flute, echoes, [shore present, mermaid suit]]}
 lynna village: {or: [lynna city, echoes]}
 black tower worker: [lynna village]
-maku tree: {or: [rescue nayru, [lynna village, shovel, kill normal]]}
+maku tree: {or: [rescue nayru, [maku path basement, kill normal]]}
 south lynna tree: [lynna city, seed item,
     or: [sword, punch object, dimitri's flute, [hard, break bush]]]
 lynna city chest: {or: [ember seeds, currents]}
@@ -20,7 +20,7 @@ shore present: {or: [flute, ricky's gloves, [break bush, feather],
     [ages, break bush], [lynna city, {or: [bracelet, mermaid suit]}],
     [currents, or: [feather, flippers, raft, [hard, seed shooter]]]]}
 south shore dirt: [shore present, or: [shovel, flute]]
-balloon guy: [feather, or: [sword, boomerang],
+balloon guy: [feather, or: [sword, boomerang, punch object],
     or: [currents, ricky's gloves, ricky's flute,
         [shore present, or: [any seed shooter,
             [hard, or: [pegasus satchel, bombs], boomerang]]]]]
@@ -78,7 +78,7 @@ d2 entrance: [deku forest, or: [bombs, currents]]
 crescent past: {or: [raft, [lynna city, mermaid suit],
     [crescent present west, currents]]}
 tokay crystal cave: [crescent past, or: [shovel, break crystal], feather]
-tokay bomb cave: [crescent past, bracelet, bombs]
+tokay bomb cave: [crescent past, or: [bracelet, ages], bombs]
 wild tokay game: [crescent past, bombs, bracelet]
 # can get the warp point by swimming under crescent island, but that's pretty
 # unintuitive.

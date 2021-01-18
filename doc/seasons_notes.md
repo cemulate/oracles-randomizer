@@ -74,6 +74,7 @@ Out of logic:
 - Poe skip
 - Fighting Frypolar without slingshot
 - D8 sidescrollers without cape
+- Jumping between north and south Subrosia using cape without pegasus seeds
 - Magic rings from non-randomized locations
 - Linked secrets
 
