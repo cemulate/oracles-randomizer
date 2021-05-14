@@ -47,11 +47,11 @@ cheval's grave: [yoll graveyard, or: [kill switch hook, bomb jump 3]]
 cheval's test: [cheval's grave, bracelet, or: [feather, flippers]]
 cheval's invention: [cheval's grave, flippers]
 grave under tree: [yoll graveyard]
-syrup: [yoll graveyard, graveyard key,
+d1 entrance: [yoll graveyard, graveyard key]
+syrup: [d1 entrance,
     or: [count: [480, fixed rupees], [hard, shovel]],
     or: [flippers, bomb jump 2, dimitri's flute, long hook]]
-graveyard poe: [yoll graveyard, graveyard key, bracelet]
-d1 entrance: [yoll graveyard, graveyard key]
+graveyard poe: [d1 entrance, bracelet]
 
 # western woods
 # it's possible to switch hook the octorok through the boulder to enter
