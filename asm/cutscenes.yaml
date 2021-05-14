@@ -77,6 +77,9 @@ seasons:
   15/5a1c/: db 80,e2,00,66 # wWarpDestVariables, in order?
 
 ages:
+  # Remove "sent back by a strange force" (zero out sentBackByStrangeForceTable)
+  04/341c/: db 00,00,00,00,00,00
+
   # as a side effect of removing the nayru/impa/ralph cutscene outside the
   # black tower. nayru hangs out in lynna village from the start. don't do
   # that.
